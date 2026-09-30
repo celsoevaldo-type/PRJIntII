@@ -1,0 +1,24 @@
+{% extends "acessos/base.html" %}
+{% block titulo %}{{ sistema.nome }} - Controle de Acessos{% endblock %}
+{% block conteudo %}
+<h1 class="h3">{{ sistema.nome }}</h1>
+<p>{{ sistema.descricao }}</p>
+
+<table class="table">
+  <caption>Quem tem acesso ao {{ sistema.nome }}</caption>
+  <thead><tr><th scope="col">Colaborador</th><th scope="col">Setor</th><th scope="col">Nível</th><th scope="col">Liberado em</th></tr></thead>
+  <tbody>
+    {% for a in acessos %}
+      <tr>
+        <td><a href="{% url 'detalhe_colaborador' a.colaborador.id %}">{{ a.colaborador }}</a></td>
+        <td>{{ a.colaborador.setor }}</td>
+        <td>{{ a.get_nivel_display }}</td>
+        <td>{{ a.concedido_em|date:"d/m/Y" }}</td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="4">Ninguém tem acesso a este sistema.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+<p><a href="{% url 'sistemas' %}">Voltar para sistemas</a></p>
+{% endblock %}

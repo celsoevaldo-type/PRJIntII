@@ -1,0 +1,19 @@
+{% extends "acessos/base.html" %}
+{% block titulo %}{{ titulo }} - Controle de Acessos{% endblock %}
+{% block conteudo %}
+<h1 class="h3 mb-3">{{ titulo }}</h1>
+<form method="post" class="col-md-6" novalidate>
+  {% csrf_token %}
+  {% for campo in form %}
+    <div class="mb-3">
+      <label for="{{ campo.id_for_label }}" class="form-label">{{ campo.label }}</label>
+      {{ campo }}
+      {% for erro in campo.errors %}
+        <div class="text-danger" id="{{ campo.id_for_label }}_erro">{{ erro }}</div>
+      {% endfor %}
+    </div>
+  {% endfor %}
+  <button class="btn btn-primary">Salvar</button>
+  <a href="{% url 'colaboradores' %}" class="btn btn-link">Cancelar</a>
+</form>
+{% endblock %}

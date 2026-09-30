@@ -1,0 +1,60 @@
+{% extends "acessos/base.html" %}
+{% block titulo %}{{ colaborador.nome }} - Controle de Acessos{% endblock %}
+{% block conteudo %}
+<h1 class="h3">{{ colaborador.nome }}
+  {% if not colaborador.ativo %}<span class="badge text-bg-secondary">Desligado</span>{% endif %}
+</h1>
+<p>{{ colaborador.cargo }} – {{ colaborador.setor }}<br>
+   {{ colaborador.email }} – na empresa desde {{ colaborador.data_entrada|date:"d/m/Y" }}</p>
+
+{% if colaborador.ativo %}
+  <a href="{% url 'editar_colaborador' colaborador.id %}" class="btn btn-outline-primary btn-sm">Editar dados</a>
+  <form method="post" action="{% url 'desligar_colaborador' colaborador.id %}" class="d-inline"
+        data-confirmar="Desligar {{ colaborador.nome }}? Todos os acessos serão retirados.">
+    {% csrf_token %}
+    <button class="btn btn-outline-danger btn-sm">Desligar da empresa</button>
+  </form>
+{% endif %}
+
+<h2 class="h5 mt-4">Acessos</h2>
+<table class="table">
+  <caption>Sistemas que {{ colaborador.nome }} pode acessar</caption>
+  <thead><tr><th scope="col">Sistema</th><th scope="col">Nível</th><th scope="col">Liberado em</th><th scope="col">Ação</th></tr></thead>
+  <tbody>
+    {% for a in acessos %}
+      <tr>
+        <td>{{ a.sistema }}</td>
+        <td>{{ a.get_nivel_display }}</td>
+        <td>{{ a.concedido_em|date:"d/m/Y" }}</td>
+        <td>
+          <form method="post" action="{% url 'revogar_acesso' a.id %}" data-confirmar="Retirar o acesso ao {{ a.sistema }}?">
+            {% csrf_token %}
+            <!-- o aria-label diz qual acesso o botão retira, senão o leitor de tela só lê "Retirar" -->
+            <button class="btn btn-link p-0" aria-label="Retirar acesso ao {{ a.sistema }}">Retirar</button>
+          </form>
+        </td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="4">Nenhum acesso.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% if colaborador.ativo %}
+  <h2 class="h5">Liberar novo acesso</h2>
+  <form method="post" action="{% url 'conceder_acesso' colaborador.id %}" class="row g-2 align-items-end">
+    {% csrf_token %}
+    <div class="col-md-5">
+      <label for="{{ form.sistema.id_for_label }}" class="form-label">Sistema</label>
+      {{ form.sistema }}
+    </div>
+    <div class="col-md-4">
+      <label for="{{ form.nivel.id_for_label }}" class="form-label">Nível</label>
+      {{ form.nivel }}
+    </div>
+    <div class="col-md-3"><button class="btn btn-primary">Liberar</button></div>
+  </form>
+{% endif %}
+
+<p class="mt-4"><a href="{% url 'colaboradores' %}">Voltar para a lista</a></p>
+{% endblock %}

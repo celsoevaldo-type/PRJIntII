@@ -1,0 +1,47 @@
+body {
+  font-size: 1.05rem;
+}
+
+.numero {
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+/* contorno bem visível em quem está com o foco, para quem navega só pelo teclado */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid #ffbf47;
+  outline-offset: 2px;
+}
+
+/* o link "pular para o conteúdo" fica fora da tela até receber foco */
+.pular-menu {
+  position: absolute;
+  left: -9999px;
+}
+
+.pular-menu:focus {
+  left: 1rem;
+  top: 1rem;
+  z-index: 1000;
+  background: #fff;
+  padding: 0.5rem 1rem;
+}
+
+/* o azul padrão do Bootstrap com o link claro ficava com pouco contraste,
+   então escurecemos o fundo e deixamos os links brancos */
+.menu-topo {
+  background-color: #1f3b73;
+}
+
+.menu-topo .nav-link,
+.menu-topo .navbar-brand {
+  color: #fff;
+}
+
+.menu-topo .nav-link:hover {
+  text-decoration: underline;
+}

@@ -1,0 +1,40 @@
+{% extends "acessos/base.html" %}
+{% block conteudo %}
+<h1 class="h3 mb-4">Resumo</h1>
+
+<div class="row g-3 mb-4">
+  <div class="col-md-4"><div class="card card-body">
+    <p class="mb-1">Colaboradores ativos</p><p class="numero">{{ total_ativos }}</p>
+  </div></div>
+  <div class="col-md-4"><div class="card card-body">
+    <p class="mb-1">Sistemas cadastrados</p><p class="numero">{{ total_sistemas }}</p>
+  </div></div>
+  <div class="col-md-4"><div class="card card-body">
+    <p class="mb-1">Acessos liberados</p><p class="numero">{{ total_acessos }}</p>
+  </div></div>
+</div>
+
+<h2 class="h5">Pessoas desligadas que ainda têm acesso</h2>
+{% if pendencias %}
+  <div class="alert alert-warning">
+    <p><strong>Atenção:</strong> estas pessoas já saíram da empresa, mas ainda aparecem com acesso a algum sistema.</p>
+    <ul class="mb-0">
+      {% for c in pendencias %}
+        <li><a href="{% url 'detalhe_colaborador' c.id %}">{{ c.nome }}</a> ({{ c.acessos.count }} acesso{{ c.acessos.count|pluralize }})</li>
+      {% endfor %}
+    </ul>
+  </div>
+{% else %}
+  <p class="text-success">Nenhuma pendência. Ninguém desligado está com acesso.</p>
+{% endif %}
+
+<h2 class="h5 mt-4">Últimas alterações</h2>
+<ul>
+  {% for r in ultimos_registros %}
+    <li>{{ r.data|date:"d/m/Y H:i" }} – {{ r.acao }} – {{ r.colaborador }}{% if r.sistema %} ({{ r.sistema }}){% endif %}</li>
+  {% empty %}
+    <li>Nada registrado ainda.</li>
+  {% endfor %}
+</ul>
+<a href="{% url 'historico' %}">Ver histórico completo</a>
+{% endblock %}

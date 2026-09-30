@@ -1,0 +1,36 @@
+{% extends "acessos/base.html" %}
+{% block titulo %}Sistemas - Controle de Acessos{% endblock %}
+{% block conteudo %}
+<h1 class="h3 mb-3">Sistemas</h1>
+
+<table class="table table-striped">
+  <caption>Sistemas e informações da empresa</caption>
+  <thead><tr><th scope="col">Sistema</th><th scope="col">Descrição</th><th scope="col">Pessoas com acesso</th></tr></thead>
+  <tbody>
+    {% for s in sistemas %}
+      <tr>
+        <td><a href="{% url 'detalhe_sistema' s.id %}">{{ s.nome }}</a></td>
+        <td>{{ s.descricao }}</td>
+        <td>{{ s.acessos.count }}</td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="3">Nenhum sistema cadastrado.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<h2 class="h5">Cadastrar sistema</h2>
+<form method="post" class="row g-2 align-items-end">
+  {% csrf_token %}
+  <div class="col-md-4">
+    <label for="{{ form.nome.id_for_label }}" class="form-label">Nome</label>
+    {{ form.nome }}
+    {% for erro in form.nome.errors %}<div class="text-danger">{{ erro }}</div>{% endfor %}
+  </div>
+  <div class="col-md-6">
+    <label for="{{ form.descricao.id_for_label }}" class="form-label">Descrição</label>
+    {{ form.descricao }}
+  </div>
+  <div class="col-md-2"><button class="btn btn-primary">Cadastrar</button></div>
+</form>
+{% endblock %}

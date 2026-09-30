@@ -1,0 +1,27 @@
+{% extends "acessos/base.html" %}
+{% block titulo %}Histórico - Controle de Acessos{% endblock %}
+{% block conteudo %}
+<h1 class="h3 mb-3">Histórico de alterações</h1>
+
+<label for="busca" class="form-label">Filtrar</label>
+<input type="search" id="busca" class="form-control mb-3" data-tabela="tabela-historico">
+
+<table class="table table-sm" id="tabela-historico">
+  <caption>Últimas 200 alterações, da mais recente para a mais antiga</caption>
+  <thead><tr><th scope="col">Data</th><th scope="col">Feito por</th><th scope="col">Ação</th><th scope="col">Colaborador</th><th scope="col">Sistema</th></tr></thead>
+  <tbody>
+    {% for r in registros %}
+      <tr>
+        <td>{{ r.data|date:"d/m/Y H:i" }}</td>
+        <td>{{ r.feito_por.username|default:"-" }}</td>
+        <td>{{ r.acao }}</td>
+        <td>{{ r.colaborador }}</td>
+        <td>{{ r.sistema|default:"-" }}</td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="5">Nada registrado ainda.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+<p id="sem-resultado" class="d-none" role="status">Nenhum registro encontrado.</p>
+{% endblock %}

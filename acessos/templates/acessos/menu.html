@@ -1,0 +1,15 @@
+<nav class="navbar navbar-expand navbar-dark menu-topo" aria-label="Menu principal">
+  <div class="container">
+    <a class="navbar-brand" href="{% url 'inicio' %}">Controle de Acessos</a>
+    <ul class="navbar-nav me-auto">
+      <li class="nav-item"><a class="nav-link" href="{% url 'colaboradores' %}">Colaboradores</a></li>
+      <li class="nav-item"><a class="nav-link" href="{% url 'sistemas' %}">Sistemas</a></li>
+      <li class="nav-item"><a class="nav-link" href="{% url 'historico' %}">Histórico</a></li>
+    </ul>
+    <form method="post" action="{% url 'logout' %}">
+      {% csrf_token %}
+      <span class="text-white me-2">{{ user.username }}</span>
+      <button class="btn btn-outline-light btn-sm">Sair</button>
+    </form>
+  </div>
+</nav>
